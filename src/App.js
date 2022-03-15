@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import twitterLogo from "./assets/twitter-logo.svg";
+import SelectCharacter from "./Components/SelectCharacter";
 import "./App.css";
 
 // Constants
@@ -11,6 +12,11 @@ const App = () => {
      * Just a state variable we use to store our user's public wallet. Don't forget to import useState.
      */
     const [currentAccount, setCurrentAccount] = useState(null);
+
+    /*
+     * Right under current account, setup this new state property
+     */
+    const [characterNFT, setCharacterNFT] = useState(null);
 
     /*
      * Since this method will take some time, make sure to declare it as async
@@ -77,6 +83,34 @@ const App = () => {
         }
     };
 
+    // Render Methods
+    const renderContent = () => {
+        /*
+         * Scenario #1
+         */
+        if (!currentAccount) {
+            return (
+                <div className="connect-wallet-container">
+                    <img
+                        src="https://64.media.tumblr.com/tumblr_mbia5vdmRd1r1mkubo1_500.gifv"
+                        alt="Monty Python Gif"
+                    />
+                    <button
+                        className="cta-button connect-wallet-button"
+                        onClick={connectWalletAction}
+                    >
+                        Connect Wallet To Get Started
+                    </button>
+                </div>
+            );
+            /*
+             * Scenario #2
+             */
+        } else if (currentAccount && !characterNFT) {
+            return <SelectCharacter setCharacterNFT={setCharacterNFT} />;
+        }
+    };
+
     /*
      * This runs our function when the page loads.
      */
@@ -94,24 +128,10 @@ const App = () => {
                     <p className="sub-text">
                         Team up to protect the Metaverse!
                     </p>
-                    <div className="connect-wallet-container">
-                        <img
-                            src="https://64.media.tumblr.com/tumblr_mbia5vdmRd1r1mkubo1_500.gifv"
-                            alt="Monty Python Gif"
-                        />
-                    </div>
-                </div>
-                <div className="connect-wallet-container">
-                    {/*
-                     * Button that we will use to trigger wallet connect
-                     * Don't forget to add the onClick event to call your method!
+                    {/* This is where our button and image code used to be!
+                     *	Remember we moved it into the render method.
                      */}
-                    <button
-                        className="cta-button connect-wallet-button"
-                        onClick={connectWalletAction}
-                    >
-                        Connect Wallet To Get Started
-                    </button>
+                    {renderContent()}
                 </div>
                 <div className="footer-container">
                     <img
